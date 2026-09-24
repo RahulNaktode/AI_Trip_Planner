@@ -46,7 +46,11 @@ userSchema.pre("save", async function() {
             console.log("Password hashing error: ", error);
         }
     }
-})
+});
+
+userSchema.methods.comparePassword = async function(candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password); 
+};
 
 const User = model("User", userSchema);
 

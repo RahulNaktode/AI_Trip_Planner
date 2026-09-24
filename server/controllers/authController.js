@@ -48,4 +48,36 @@ const register = async (req, res) => {
     }
 }
 
-export { register };
+const login = async (req, res) => {
+    const error = validationResult(req);
+
+    if(!error.isEmpty()) {
+        return res.json({ errors: error.array() });
+    }
+
+    try{
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email }).select("+password");
+
+        if(!user || !(await user.comparePassword(password))) {
+            return res.json({ message: "Invalid email or password" });
+        }
+
+        const token = signToken(user._id);
+
+        return res.json({
+            success: true,
+            token: token,
+            data: filterUserResponse(user)
+        })
+
+    }catch(error){
+        console.log("Login error: ", error);
+        return res.json({
+            error: "Login failed, please try again later"
+        })
+    }
+}
+
+export { register, login };
