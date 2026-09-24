@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new Schema({
     name: {
@@ -35,6 +36,17 @@ const userSchema = new Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
 });
+
+userSchema.pre("save", async function() {
+    if(this.isModified("password")) {
+        try{
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+        }catch(error){
+            console.log("Password hashing error: ", error);
+        }
+    }
+})
 
 const User = model("User", userSchema);
 
