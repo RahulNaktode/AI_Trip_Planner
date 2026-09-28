@@ -80,4 +80,31 @@ const login = async (req, res) => {
     }
 }
 
-export { register, login };
+const getMe = async (req, res) => {
+    try{
+        const user = await User.findById(req.user.userId);
+
+        if(!user) {
+            return res.json({
+                success: false,
+                message: "User not found",
+                data: null
+            });
+        }
+
+        return res.json({
+            success: true,
+            data: filterUserResponse(user)
+        });
+
+    }catch(error){
+        console.log("GetMe error: ", error);
+        return res.json({
+            success: false,
+            message: "Failed to fetch user data.",
+            data: null
+        });
+    }
+}
+
+export { register, login, getMe };
