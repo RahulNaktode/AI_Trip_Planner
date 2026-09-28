@@ -46,6 +46,18 @@ userSchema.pre("save", async function() {
             console.log("Password hashing error: ", error);
         }
     }
+
+    if(this.isModified("country")) {
+        const countryCurrencyMap = {
+            "USA": "USD",
+            "Canada": "CAD",
+            "UK": "GBP",
+            "Germany": "EUR",
+            "France": "EUR",
+            "Japan": "JPY",
+        };
+        this.currency = countryCurrencyMap[this.country.toUpperCase() || "USD"];
+    }
 });
 
 userSchema.methods.comparePassword = async function(candidatePassword) {

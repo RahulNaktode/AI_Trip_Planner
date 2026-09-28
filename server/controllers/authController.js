@@ -107,4 +107,10 @@ const getMe = async (req, res) => {
     }
 }
 
-export { register, login, getMe };
+const logout = (req, res) => {
+    res.json({
+        message: "Successfully logged out",
+    })
+}
+
+export { register, login, getMe, logout };
