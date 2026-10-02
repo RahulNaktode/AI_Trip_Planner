@@ -169,31 +169,21 @@ Generate exactly ${duration} days.
 
     const newTrip = new Trip({
       userId,
-
       destination,
-
       input: {
         ...inputs,
         duration,
         numTravelers: travelers,
       },
-
       itinerary: aiData.itinerary,
-
       insights: aiData.insights,
-
       packingList: aiData.packingList,
-
       shareId: uuidv4(),
     });
 
     await newTrip.save();
 
     console.log("Trip saved successfully:", newTrip._id);
-
-    // ==========================================
-    // Response
-    // ==========================================
 
     return res.status(201).json({
       success: true,
@@ -240,6 +230,90 @@ const getHistory = async (req, res) => {
     }
 }
 
-const getTripById = async (req, res) => {}
+const getShareTrip = async (req, res) => {
+  try {
+       const trip = await Trip.findOne({
+        shareId: req.params.shareId,
+        isPublic: true,
+       });
 
-export { generateTrip, getHistory, getTripById };
+       if(!trip){
+        return res.status(404).json({
+            error: "This trip is eighter private or does not exist",
+        });
+       }
+
+       return res.json({trip});
+    } catch(error) {
+        console.error("Error fetching share trip history:", error);
+        return res.status(500).json({
+            success: false,
+            message: "History fetching Share trip",
+        });
+    }
+}
+
+const getTripById = async (req, res) => {
+    try {
+      const trip = await Trip.findOne({
+        _id: req.params.id,
+        userId: req.user.userId,
+      });
+
+      if(!trip){
+        return res.status(404).json({
+          error: "Trip not found",
+        });
+      }
+      return res.json({trip: trip});
+    } catch(error) {
+      return res.status(500).json({ error: "Error fetching trip" });
+    }
+}
+
+const toggelShare = async (req, res) => {
+  try {
+      const trip = await Trip.findOne({
+        _id: req.params.id,
+        userId: req.user.userId,
+      });
+
+      if(!trip){
+        return res.status(404).json({
+          error: "Trip not found",
+        });
+      }
+
+      trip.isPublic = !trip.isPublic;
+
+      if(!trip.shareId){
+        trip.shareId = uuidv4();
+      }
+
+      await trip.save();
+
+      return res.json({isPublic: trip.isPublic, shareId: trip.shareId});
+    } catch(error) {
+      return res.status(500).json({ error: "Error fetching trip" });
+    }
+}
+
+const deleteTrip = async (req, res) => {
+  try {
+    const result = await Trip.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId,
+    });
+
+    if(!result){
+      return res.status(404).json({
+        error: "Trip not found or unauthorized",
+      })
+    }
+    res.json({ message: "Trip deleted successfully" });
+  } catch(error) {
+    return res.status(500).json({ error: "Error deleting trip" });
+  }
+}
+
+export { generateTrip, getHistory, getTripById, toggelShare, deleteTrip, getShareTrip };

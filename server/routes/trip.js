@@ -1,5 +1,5 @@
 import express from "express";
-import { generateTrip, getHistory, getTripById } from "../controllers/tripController.js";
+import { generateTrip, getHistory, getTripById, toggelShare, deleteTrip, getShareTrip } from "../controllers/tripController.js";
 import { checkJWT } from "../middleware/jwt.js";
 import { body, validationResult } from "express-validator";
 import rateLimiter from "express-rate-limit";
@@ -38,5 +38,8 @@ router.post("/generate", checkJWT, aiLimiter, generateValidator, validate, gener
 
 router.get("/history", checkJWT, getHistory);
 router.get("/:id", checkJWT, getTripById);
+router.patch("/:id/share", checkJWT, toggelShare);
+router.delete("/:id", checkJWT, deleteTrip);
+router.get("/share/:shareId", getShareTrip);
 
 export default router;

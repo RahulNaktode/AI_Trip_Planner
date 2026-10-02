@@ -14,7 +14,7 @@ const tripSchema = new Schema({
         trim: true,
     },
 
-    input: {
+    inputs: {
         startDate: String,
         endDate: String,
         duration: { type: Number, default: 3 },
