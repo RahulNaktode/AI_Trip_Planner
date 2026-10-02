@@ -30,6 +30,16 @@ const tripSchema = new Schema({
         required: true,
     },
 
+    insights: {
+      type: Schema.Types.Mixed,
+      default: [],
+    },
+
+    packingList: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
+
     shareId: {
         type: String,
         unique: true,
