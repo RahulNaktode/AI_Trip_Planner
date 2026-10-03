@@ -8,7 +8,7 @@ const router = express.Router();
 
 const aiLimiter = rateLimiter({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 20, // Limit each IP to 20 requests per windowMs
+    max: 20, 
     message: {
         message: "AI generate quote reached, please try again after an hour",
         standardHeaders: true,

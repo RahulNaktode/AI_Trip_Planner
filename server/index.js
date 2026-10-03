@@ -5,6 +5,7 @@ import connectDB from "./db.js";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
 import tripRoute from "./routes/trip.js";
+import budgetRoute from "./routes/budget.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 5080;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/trip", tripRoute);
+app.use("/api/budget", budgetRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
