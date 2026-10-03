@@ -1,7 +1,8 @@
 import express from "express";
-import { calculateBudget } from "../controllers/budgetController.js";
+import { calculateBudget, getHistory, getAIInsight } from "../controllers/budgetController.js";
 import { body, validationResult } from "express-validator";
 import rateLimiter from "express-rate-limit";
+import { checkJWT } from "../middleware/jwt.js";
 
 const router = express.Router();
 
@@ -34,7 +35,14 @@ const calValidation = [
     body("inputs.accommodationType").notEmpty().withMessage("Accommodation type is required"),
 ]
 
-router.post("/calculate", calValidation, validate, calculateBudget);
+const aiValidation = [
+    body("budgetId").isMongoId().withMessage("A valid Budget ID is required")
+]
 
+router.post("/calculate",checkJWT, calValidation, validate, calculateBudget);
+
+router.get("/history", checkJWT, getHistory);
+
+router.post("/ai-insights", checkJWT, aiLimiter, aiValidation, validate, getAIInsight);
 
 export default router;

@@ -54,6 +54,13 @@ const tripSchema = new Schema({
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+});
+
+tripSchema.virtual("formatedDate").get(function(){
+    return this.createdAt.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric"
+    })
 })
 
 const Trip = model("Trip", tripSchema);
