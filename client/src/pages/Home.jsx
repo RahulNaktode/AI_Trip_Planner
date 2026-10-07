@@ -1,11 +1,27 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import { motion } from 'framer-motion'
-import { ArrowRight, Cpu, Fingerprint, Globe, Play, ShieldCheck, Zap, Lock, ActivityIcon, Layers, Star, Activity, CloudSun } from 'lucide-react'
+import { ArrowRight, Cpu, Fingerprint, Globe, Play, ShieldCheck, Zap, Lock, ActivityIcon, Layers, Star, Activity, CloudSun, FileText } from 'lucide-react'
 import tripImage from './../assets/trip.jpg'
 
 
-function Home(fadeInUp) {
+function Home() {
+  const fadeInUp = {
+    initial: {
+      opacity: 0,
+      y: 30,
+    },
+    whileInView: {
+      opacity: 1,
+      y: 0,
+    },
+    viewport: {
+      once: true,
+    },
+    transition: {
+      duration: 0.7,
+    },
+  };
   return (
     <div>
       <Navbar />
@@ -143,7 +159,7 @@ function Home(fadeInUp) {
             </div>
             <Globe
               size={350}
-              className='absolute -bottom-20 -right-20 text-white/10 animate-spin-slow pointer-events-none' />
+              className='absolute -bottom-20 -right-20 text-white/10 animate-spin pointer-events-none' />
           </motion.div>
 
           <motion.div {...fadeInUp} className='md:col-span-8 bg-[#08080a] border border-white/5 rounded-[3rem] p-12 flex items-center justify-between 
@@ -195,20 +211,24 @@ function Home(fadeInUp) {
         </div>
       </section>
 
-      <section className='py-32 px-6 bg-[#050507] border-y border-white/5'>
-        <div className='max-w-7xl mx-auto grid grid-cols-1 lhg:grid-cols-2 gap-24 items-center'>
+      <section className="py-32 px-6 bg-[#050507] border-y border-white/5">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <motion.div {...fadeInUp}>
-            <div className='inline-flex items-center gap-2 px-2 bg-blue-600 text-white rounded-lg mb-10'>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg mb-10">
               <Cpu size={18} />
-              <span className='text-[10px] font-black uppercase tracking-widest'>
+
+              <span className="text-[10px] font-black uppercase tracking-widest">
                 Logic Engine
               </span>
             </div>
-            <h2 className='text-6xl font-black text-white italic uppercase mb-12 leading-none'>
+
+            <h2 className="text-6xl font-black text-white italic uppercase mb-12 leading-none">
               Autonomous
-            </h2>{" "}
-            <br />Logistic
-            <div className='space-y-10'>
+              <br />
+              Logistics
+            </h2>
+
+            <div className="space-y-10">
               {[
                 {
                   s: "01",
@@ -218,65 +238,90 @@ function Home(fadeInUp) {
                 {
                   s: "02",
                   t: "Vector Synthesis",
-                  d: "AI cross-refernces millions of data points for optimal paths.",
+                  d: "AI cross-references millions of data points for optimal paths.",
                 },
                 {
                   s: "03",
                   t: "Live Deployment",
                   d: "Dynamic updates sent to your device every 60 seconds.",
-                }
-              ].map((step, i) => (
-                <div className='flex gap-8 group'>
-                  <span className='text-blue-600 font-black text-3xl opacity-50 group-hover:opacity-100 tarnsition-opacity'>
+                },
+              ].map((step) => (
+                <div
+                  key={step.s}
+                  className="flex gap-8 group"
+                >
+                  <span className="text-blue-600 font-black text-3xl opacity-50 group-hover:opacity-100 transition-opacity">
                     {step.s}
                   </span>
+
                   <div>
-                    <h4 className='text-2xl font-black text-white italic uppercase mb-2 tracking-tighter'>
+                    <h4 className="text-2xl font-black text-white italic uppercase mb-2 tracking-tighter">
                       {step.t}
                     </h4>
-                    <p className='text-gray-500 text-lg'>{step.d}</p>
+
+                    <p className="text-gray-500 text-lg">
+                      {step.d}
+                    </p>
                   </div>
                 </div>
-              ))
-              }
+              ))}
             </div>
           </motion.div>
 
-          <div className='relative'>
-            <img src="https://images.unplash.com/photo-1550751827-4bd374c3f58b?q-80&w=2070" alt=""
-              className='rounded-[3rem] grayscale opacity-40 border border-white/10'
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070"
+              alt="Technology"
+              className="rounded-[3rem] grayscale opacity-40 border border-white/10"
             />
-            <div className='absolute inset-0 flex items-center justify-center'>
-              <div className='p-10 bg-blue-600/10 backdrop-blur-3xl rounded-full border border-blure-500/20 shadow-2xl animate-pulse'>
-                <Activity size={64} className='text-blue-500' />
+
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="p-10 bg-blue-600/10 backdrop-blur-3xl rounded-full border border-blue-500/20 shadow-2xl animate-pulse">
+                <Activity size={64} className="text-blue-500" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className='p-48 relative overflow-hidden text-center px-6'>
-        <div className='absolute insert-0 bg-gradient-to-b from-blue-500/5 to-transparent' />
-        <motion.div {...fadeInUp} className='relative z-10' >
-          <CloudSun size={100} className='text-blue-500 mx-auto mb-10' />
-          <h2 className='text-7xl font-black text-white italic uppercase tracking-tighter mb-10 leading-none'>
-            Atmospheric <br /> Awareness
+      <section className="py-48 relative overflow-hidden text-center px-6">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent" />
+
+        <motion.div {...fadeInUp} className="relative z-10">
+          <CloudSun
+            size={100}
+            className="text-blue-500 mx-auto mb-10"
+          />
+
+          <h2 className="text-7xl font-black text-white italic uppercase tracking-tighter mb-10 leading-none">
+            Atmospheric
+            <br />
+            Awareness
           </h2>
-          <p className='text-gray-500 text-2xl leading-relaxed max-w-3xl mx-auto font-medium'>
-            We track real-time weather and political tides, rerouting your jouney if conditions become sub-iptimal. Your mission is never static.
+
+          <p className="text-gray-500 text-2xl leading-relaxed max-w-3xl mx-auto font-medium">
+            We track real-time weather and political tides, rerouting your
+            journey if conditions become sub-optimal. Your mission is never
+            static.
           </p>
         </motion.div>
       </section>
 
-      <section className='py-32 px-6 bg-[#050507]'>
-        <div className='max-w-7xl mx-auto'>
-          <div className='flex justify-between items-end mb-20'>
-            <h2 className='text-6xl font-black text-white italic uppercase leading-none tracking-top-righter'>
-              Global <br />{" "}
-              <span className='text-blue-600 not-italic'>Deployments.</span>
+      {/* GLOBAL DEPLOYMENTS */}
+      <section className="py-32 px-6 bg-[#050507]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-20">
+            <h2 className="text-6xl font-black text-white italic uppercase leading-none tracking-tighter">
+              Global
+              <br />
+              <span className="text-blue-600 not-italic">
+                Deployments.
+              </span>
             </h2>
-            <div className='bg-white/5 px-6 py-3 rounded-xl border border-white/10 flex items-center gap-3 text-blue-500text-[10px] font-black tracking-widest uppercase'>
-              <FileReader size={16} className='animate-spin-slow' /> Live
+
+            <div className="bg-white/5 px-6 py-3 rounded-xl border border-white/10 flex items-center gap-3 text-blue-500 text-[10px] font-black tracking-widest uppercase">
+              <FileText size={16} />
+              Live
             </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
@@ -318,9 +363,12 @@ function Home(fadeInUp) {
       <section className='py-32 px-6'>
         <div className='max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 items-center'>
           <div className='flex-1'>
-            <img src="https://image.unspash.com/photo-1451187580459-43490279c0fa?q=806w=2072" alt=""
-              className='rounded-[3rem] border border-white/10 mix-blend-screen opacity-50'
+            <img
+              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072"
+              alt="Global network"
+              className="rounded-[3rem] border border-white/10 mix-blend-screen opacity-50"
             />
+
           </div>
           <div className='flex-1'>
             <h2 className='text-5xl font-black text-white italic uppercase tracking-tighter mb-8 leading-none'>
@@ -372,7 +420,7 @@ function Home(fadeInUp) {
             <span className='text-blue-600 not-italic'>Explore more</span>
           </h2>
           <a href=""
-          className='px-20 py-10 bg-wjite text-black rounded-2xl text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
+          className='px-20 py-10 bg-white text-black rounded-2xl text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
           hover:text-white transition-all transform hover:-translate-y-4 shadow-[0_40px_80px_rdba(255,255,255,0.1)]'
           >
             Initialize Mission
