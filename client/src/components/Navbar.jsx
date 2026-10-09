@@ -6,11 +6,11 @@ const navLinks = [
     {
         path: "/dashboard",
         label: "OVERVIEW",
-        icon: <LayoutDashboard size={14} />
+        icon: <LayoutDashboard size={16} />
     },
-    { path: "/plan", label: "PLANNER", icon: <Compass size={14} />},
-    { path: "/budget", label: "AUDIT", icon: <Wallet size={14} />},
-    { path: "/trip", label: "JOURNEYS", icon: <Briefcase size={14} />}
+    { path: "/plan", label: "PLANNER", icon: <Compass size={16} />},
+    { path: "/budget", label: "AUDIT", icon: <Wallet size={16} />},
+    { path: "/trip", label: "JOURNEYS", icon: <Briefcase size={16} />}
 ]
 
 function Navbar() {
@@ -20,15 +20,15 @@ function Navbar() {
             <div className='flex items-center justify-between h-full'>
                 <a href="#" className='flex items-center gap-4 group'>
                     <div className='w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3] group-hover:rotate-90 transition-transform duration-500'>
-                    <Globe className='text-white' size={18} />
+                    <Globe className='text-white' size={20} />
                     </div>
 
                     <div className='flex flex-col'>
-                        <span className='text-lg font-black text-white tracking-tighter leading-none italic uppercase'>
+                        <span className='text-2xl font-black text-white tracking-tighter leading-none italic uppercase'>
                             Wander <span className='text-blue-500 text-shadow-glow'>AI</span>
                             <div className='flex items-center gap-1 mt-0.5'>
                                 <Cpu size={8} className='text-blue-500/50' />
-                                <span className='text-[7px] font-black text-blue-500/50 tracking-[0.4em] uppercase'>
+                                <span className='text-[10px] font-black text-blue-500/50 tracking-[0.4em] uppercase'>
                                 OS_CORS_V0.5
                                 </span>
                             </div>
@@ -50,11 +50,11 @@ function Navbar() {
                     <div className='hidden lg:flex items-center gap-3 bg-white/[0.02] border border-white/5 py-1.5 pl-2 pr-4 
                     rounded-xl hover:bg-white/[0.5] transition-all cursor-pointer group-user'>
                         <div className='w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border'>
-                        <User size={12} className='text-gray-400 group-hover:/user:text-blue-500' />
+                        <User size={16} className='text-gray-400 group-hover:/user:text-blue-500' />
                         </div>
                         <div className='flex flex-col'>
-                            <p className='text-[10px] font-black text-white leading-none mb-1 uppercase tracking-tight'>Admin</p>
-                            <div className='flex items-center gap-1.5'>
+                            <p className='text-[13px] font-black text-white leading-none mb-1 uppercase tracking-tight'>Admin</p>
+                            <div className='flex items-center gap-1'>
                                 <div className='w-1 h-1 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_05px_#10b981]'>
                                     <span className='text-[7px] font-black text-emerald-500/70 uppercase tracking-widest'>
                                      Online

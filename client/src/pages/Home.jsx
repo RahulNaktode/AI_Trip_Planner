@@ -420,7 +420,7 @@ function Home() {
             <span className='text-blue-600 not-italic'>Explore more</span>
           </h2>
           <a href=""
-          className='px-20 py-10 bg-white text-black rounded-2xl text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
+            className='px-20 py-10 bg-white text-black rounded-2xl text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
           hover:text-white transition-all transform hover:-translate-y-4 shadow-[0_40px_80px_rdba(255,255,255,0.1)]'
           >
             Initialize Mission
