@@ -3,11 +3,12 @@ import React from 'react'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import BudgetEstimator from './pages/BudgetEstimator'
 
 function App() {
   return (
     <div className='min-h-screen bg-[#020203] text-gray-400 font-sans selection:bg-blue-600 selection:text-white overflow-hidden'>
-      <Dashboard />
+      <BudgetEstimator />
     </div>
   )
 }
