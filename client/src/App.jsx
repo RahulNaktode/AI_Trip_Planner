@@ -6,11 +6,12 @@ import Dashboard from './pages/Dashboard'
 import BudgetEstimator from './pages/BudgetEstimator'
 import SavedTrips from './pages/SavedTrips'
 import TripDetail from './pages/TripDetail'
+import TripPlanner from './pages/TripPlanner'
 
 function App() {
   return (
     <div className='min-h-screen bg-[#020203] text-gray-400 font-sans selection:bg-blue-600 selection:text-white overflow-hidden'>
-      <TripDetail />
+      <TripPlanner />
     </div>
   )
 }
