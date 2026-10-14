@@ -1,23 +1,69 @@
-import { Compass, Globe, ShieldAlert, Target, User, Activity, Mail, Lock, ShieldCheck, Zap, MapPin } from 'lucide-react'
-import React from 'react'
+import { Compass, Globe, ShieldAlert, Target, User, Activity, Mail, Lock, ShieldCheck, Zap, MapPin, Loader2, ChevronRight } from 'lucide-react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import TacticalInput from '../components/TacticalInput'
+import { useAuth } from '../context/AuthContext'
+import { useNavigate, Link } from 'react-router'
+import toast from 'react-hot-toast'
 
 function Register() {
+    const { register } = useAuth();
+    const navigate = useNavigate();
+
+    const [form, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        country: "USA",
+    });
+
+    const [error, setError] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const validate = () => {
+        const errs = {};
+        if (form.name.length < 2) errs.name = "ENTRY_REQUIRED: NAME";
+        if (!/\S+@\S+\.\S+$/.test(form.email)) errs.email = "INVALID_UPLINK: EMAIL";
+        if (form.password.length < 6)
+            errs.password = "SECUTITY_BREACH: PASSKEY_TOO_SHORT";
+        return errs;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const errs = validate();
+        if (Object.keys(errs).length > 0) {
+            setError(errs);
+            return;
+        }
+        setError({});
+        setLoading(true);
+
+        try {
+            await register(form);
+            toast.success(`Welcome aboard, ${form.name.split(" ")[0]}`)
+            navigate("/dashboard");
+        } catch (err) {
+            setError({ general: err.resonse?.data?.error || "Connect Failure....." })
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className='min-h-screen bg-[#020203] flex font-sans selection:bg-blue-600 selection:text-white text-gray-400 overflow-hidden'>
             <div className='hidden lg:flex lg:w-1/2 bg-[#050507] relative flex-col justify-between p-16 overflow-hidden border-r border-white/5'>
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070')] bg-cover bg-center grayscale opacity-10 mix-blend-overlay" />
                 <div className='absolute inset-0 bg-gradient-to-b from-[#020203] via-transparent to-[#020203] pointer-events-none' />
 
-                <a href="#" className='relative z-10 flex items-center gap-3 group'>
+                <Link to={"/"} className='relative z-10 flex items-center gap-3 group'>
                     <div className='w-12 h-12 rounded-2xl bg-white/5 backdrop-blur-xl flex items-center justify-center border border-white/10 group-hover:border-blue-500 transition-all duration-500'>
                         <Globe className='text-blue-600' size={24} />
                     </div>
                     <span className='text-2xl font-black italic uppercase tracking-tighter text-white'>
                         Wander <span className='text-blue-600 not-italic'>AI.</span>
                     </span>
-                </a>
+                </Link>
 
 
                 <motion.div
@@ -76,49 +122,76 @@ function Register() {
                         <p className='text-gray-600 font-black text-white italic uppercase tracking-tighter mb-4'>
                             Existing Account?
                         </p>
-                        <a href="#"
+                        <Link to={"/login"}
                             className='text-blue-500 hover:text-blue-400 transition-all underline-offset-4 underline'
                         >
                             Login Now
-                        </a>
+                        </Link>
                     </div>
 
                     <div className='bg-[#08080a] rounded-[40px] border border-white/5 p-2 shadow-2xl relative overflow-hidden'>
                         <div className='absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent' />
-                        {/*<motion.div
-                               initial={{ opacity:0, scale:0.95}}
-                               animate={{ opacity:1, scale: 1 }}
-                               className='mx-6 mt-6 p-4 bg-red-950/20 rounded-2xl border border-red-900/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-4'
-                               >
-                                <ShieldAlert size={18} className='animate-pulse' />
-                               </motion.div>*/}
 
-                        <form className='p-8 space-y-5'>
+                        {error && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className='mx-6 mt-6 p-4 bg-red-950/20 rounded-2xl border border-red-900/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-4'
+                            >
+                                <ShieldAlert size={18} className='animate-pulse' />
+                            </motion.div>
+                        )}
+
+                        <form className='p-8 space-y-5' onSubmit={handleSubmit}>
                             <TacticalInput
-                                label="Identity label"
+                                label={"Identity label"}
                                 icon={User}
                                 type="text"
                                 placeholder="Marco Polo"
+                                value={form.name}
+                                error={error.name}
+                                onChange={(e) => setFormData({
+                                    ...form, name: e.target.value
+                                })}
                             />
 
                             <TacticalInput
-                                label="Email Address"
+                                label={"Email Address"}
                                 icon={Mail}
                                 type="Email"
                                 placeholder="Admin@gmail.com"
+                                value={form.email}
+                                error={error.email}
+                                onChange={(e) => setFormData({
+                                    ...form, email: e.target.value
+                                })}
                             />
 
                             <TacticalInput
-                                label="Security Passkey"
+                                label={"Security Passkey"}
                                 icon={Lock}
                                 type="password"
                                 placeholder=".........."
+                                value={form.password}
+                                error={error.password}
+                                onChange={(e) => setFormData({
+                                    ...form, password: e.target.value
+                                })}
                             />
 
-                            <button type='submit' className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
+                            <button
+                                type='submit'
+                                disabled={loading}
+                                className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
                                 font-black uppercase tracking-[0.3em] text-xs transition-all flex items-center justify-center gap-3 shadow-2xl shadow-blue-950/20 mt-8
                                 active:scale-95 disabled:opacity-50'>
-                                Register Now
+                                {loading ? (
+                                    <Loader2 />
+                                ) : (
+                                    <>
+                                        Register Now <ChevronRight />
+                                    </>
+                                )}
                             </button>
                         </form>
                     </div>

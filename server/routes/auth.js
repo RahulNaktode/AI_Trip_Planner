@@ -23,7 +23,6 @@ const registerValidation = [
     .normalizeEmail(),
     body("password").isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),
-    body("country").notEmpty().withMessage("Country is required")
 ];
 
 const loginValidation = [
