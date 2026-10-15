@@ -17,68 +17,84 @@ const filterUserResponse = (user) => ({
     plan: user.plan || "free",
 })
 
-const register = async (req, res) => {
-    const error = validationResult(req);
 
-    if(!error.isEmpty()) {
-        return res.json({ errors: error.array() });
+const register = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
 
-    try{
+    try {
         const { name, email, password, country } = req.body;
 
         const existingUser = await User.findOne({ email });
-        if(existingUser) {
-            return res.json({ message: "This email is already registered" });
+
+        if (existingUser) {
+            return res.status(409).json({
+                message: "This email is already registered",
+            });
         }
 
-        const user = await User.create({ name, email, password, country });
+        const user = await User.create({
+            name,
+            email,
+            password,
+            country,
+        });
 
         const token = signToken(user._id);
 
-        return res.json({ 
-            message: "User registered successfully", 
-            token: token,
-            data: filterUserResponse(user)
+        return res.status(201).json({
+            success: true,
+            message: "User registered successfully",
+            token,
+            user: filterUserResponse(user),
         });
+    } catch (error) {
+        console.error("Registration error:", error);
 
-        console.log(req.body);
-    } catch(error){
-        console.log("Registeration error: ", error);
+        return res.status(500).json({
+            message: "Registration failed",
+        });
     }
-}
+};
 
 const login = async (req, res) => {
-    const error = validationResult(req);
+    const errors = validationResult(req);
 
-    if(!error.isEmpty()) {
-        return res.json({ errors: error.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
 
-    try{
+    try {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email }).select("+password");
 
-        if(!user || !(await user.comparePassword(password))) {
-            return res.json({ message: "Invalid email or password" });
+        if (!user || !(await user.comparePassword(password))) {
+            return res.status(401).json({
+                message: "Invalid email or password",
+            });
         }
 
         const token = signToken(user._id);
 
-        return res.json({
+        return res.status(200).json({
             success: true,
-            token: token,
-            data: filterUserResponse(user)
-        })
+            message: "Login successful",
+            token,
+            user: filterUserResponse(user),
+        });
+    } catch (error) {
+        console.error("Login error:", error);
 
-    }catch(error){
-        console.log("Login error: ", error);
-        return res.json({
-            error: "Login failed, please try again later"
-        })
+        return res.status(500).json({
+            message: "Login failed, please try again later",
+        });
     }
-}
+};
+
 
 const getMe = async (req, res) => {
     try{

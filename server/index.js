@@ -43,7 +43,7 @@ app.use("/api/budget", generateLimiter, budgetRoute);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  console.err(`[${new Date().toLocaleString()}] Error`, err.stack);
+  console.error(`[${new Date().toLocaleString()}] Error`, err.stack);
 
   if(err.status == 401 || (err.response && err.response.status == 401)){
     return res.status(500).json({ error: "AI Serverice configuration error, check api key..."});

@@ -1,25 +1,54 @@
-import { Fingerprint, Globe, Lock, Mail, MapPin, Radar, ShieldCheck, Sparkles, Target, Zap } from 'lucide-react'
+import { Fingerprint, Globe, Loader2, Lock, Mail, MapPin, Radar, ShieldCheck, Sparkles, Target, Zap, ShieldAlert } from 'lucide-react'
 import { motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router'
 import TacticalInput from '../components/TacticalInput'
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const [form, setForm] = useState({ email: "", password: "" });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+
+
+        try {
+            await login(form.email, form.password);
+            navigate("/dashboard");
+
+        } catch (error) {
+            setError(
+                error.response?.data?.error || "Authorization Failed please check your credentails"
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className='min-h-screen bg-[#020203] flex font-sans selection:bg-blue-600 selection:text-white text-gray-400 overflow-hidden'>
             <div className='hidden lg:flex lg-w-[-50px] bg-[#050507] relative flex-col justify-between p-16 overflow-hidden border-r border-white/5'>
                 <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px.transparent_1px)]
-      bg-[size:40px_40px]'></div>
+      bg-[size:40px_40px]'/>
                 <div className='absolute top-[-20px] left-[-10px] w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full' />
                 <div className='absolute bottom-[0%] right-[-10%] w-[400px] h-[400px] bg-blue-900/10 blur-[120px] rounded-full' />
 
-                <a href="#" className='relative z-10 flex items-center gap-3 group'>
+                <Link 
+                to={"/"}
+                className='relative z-10 flex items-center gap-3 group'>
                     <div className='w-12 h-12 rounded-2xl bg-white/5 backdrop-blur-xl flex items-center justify-center border border-white/10 group-hover:border-blue-500 transition-all duration-500'>
                         <Globe className='text-blue-600' size={24} />
                     </div>
                     <span className='text-2xl font-black italic uppercase tracking-tighter text-white'>
                         Wander <span className='text-blue-600 not-italic'>AI.</span>
                     </span>
-                </a>
+                </Link>
 
                 <div className='relative z-10 max-w-lg'>
                     <motion.div
@@ -76,30 +105,36 @@ function Login() {
                         </h1>
                         <p className='text-gray-600 font-bold uppercase text-xs tracking-widest'>
                             Unregistered User{" "}
-                            <a href="#"
+                            <Link
+                                to={"/register"}
                                 className='text-blue-500 hover:text-blue-400 transition-colors'
                             >
                                 Create a Account
-                            </a>
+                            </Link>
                         </p>
                     </div>
 
                     <div className='bg-[#08080a] rounded-[40px] border border-white/5 p-2 shadow-2xl relative overflow-hidden'>
                         <div className='absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30' />
-                        {/*<motion.div
-                               initial={{ opacity:0, scale:0.95}}
-                               animate={{ opacity:1, scale: 1 }}
-                               className='mx-6 mt-6 p-4 bg-red-950/20 rounded-2xl border border-red-900/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-4'
-                               >
+                        {error && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className='mx-6 mt-6 p-4 bg-red-950/20 rounded-2xl border border-red-900/20 text-[10px] font-black uppercase tracking-widest flex items-center gap-4'
+                            >
+                                {error}
                                 <ShieldAlert size={18} className='animate-pulse' />
-                               </motion.div>*/}
+                            </motion.div>
+                        )}
 
-                        <form className='p-8 space-y-5'>
+                        <form className='p-8 space-y-5' onSubmit={handleSubmit}>
                             <TacticalInput
                                 label="User Email"
                                 icon={Mail}
                                 type="Email"
                                 placeholder="Admin@gmail.com"
+                                value={form.email}
+                                onChange={(e) => setForm({ ...form, email: e.target.value })}
                             />
 
                             <div className='space-y-3'>
@@ -119,13 +154,18 @@ function Login() {
                                     icon={Lock}
                                     type="password"
                                     placeholder="............"
+                                    value={form.password}
+                                onChange={(e) => setForm({ ...form, password: e.target.value })}
                                 />
                             </div>
 
-                            <button type='submit' className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
+                            <button 
+                            type='submit'
+                            disabled={loading}
+                            className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
                                 font-black uppercase tracking-[0.3em] text-xs transition-all flex items-center justify-center gap-3 shadow-2xl shadow-blue-950/20 mt-8
                                 active:scale-95 disabled:opacity-50'>
-                                Login Now
+                                {loading ? <Loader2 size={20} className='animate-spin'/> : "Login" }
                             </button>
                         </form>
                     </div>
