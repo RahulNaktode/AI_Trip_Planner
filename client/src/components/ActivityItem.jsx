@@ -9,7 +9,7 @@ function ActivityItem({ time, action, desc, dot }) {
                 {action}
             </p>
             <p className='text-[10px] text-gray-500'>{desc}</p>
-            <p className='text-[8px] text-gray-700  font-bold mt-1 uppercase tracking-widest'>{desc}</p>
+            <p className='text-[8px] text-gray-700  font-bold mt-1 uppercase tracking-widest'>{time}</p>
         </div>
     </div>
   )

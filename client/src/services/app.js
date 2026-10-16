@@ -52,4 +52,29 @@ export const authAPI = {
     getMe: () => api.get("/auth/me"),
 };
 
+export const tripApi = {
+    generate: (data) => api.post("/trip/generate", data),
+    getHistory: async () => {
+        const res = await api.get("/trip/history");
+        return res.data.trips || [];
+    },
+    history: async function (){
+        return this.getHistory;
+    },
+    getById: (id) => api.get(`/trip/${id}`),
+    delete: (id) => api.delete(`/trip/${id}`),
+};
+
+export const budgetApi = {
+    calculate: (data) => api.post("/budget/calculate", data),
+    getInsight:  (budgetId) => api.post("/budget/ai-insight", {budgetId}),
+    getHistory: async () => {
+        const res = await api.get("/budget/history");
+        return res.data.budgets || [];
+    },
+    getById: (id) => api.get(`/budget/${id}`),
+    updateStats: (id, status) => api.post(`/budget/${id}`, { status }),
+    delete: (id) => api.delete(`/budget/${id}`),
+};
+
 export default api;
