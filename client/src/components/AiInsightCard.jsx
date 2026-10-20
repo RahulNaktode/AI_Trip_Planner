@@ -2,7 +2,22 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { AlertCircle, Infinity, ShieldCheck, Sparkles, Target, Zap } from 'lucide-react'
 
-function AiInsightCard() {
+function AiInsightCard({ insights }) {
+    const displaySummary = 
+      insights[0].aiInsights.verdict ||
+      "Optimization protocol complete. Neural engines have calibrated the most efficient route based on your unique travel style and budget constraints.";
+    
+    const optimizationTips = 
+      insights[0].aiInsights?.moneySavingTips.length > 0 ? insights[0].aiInsights?.moneySavingTips 
+      : [
+        "Dynamic route clustering active to minimize transit time.",
+        "Local peak-hour avoidance protocols enabled.",
+        "Budget-index calibrated for maximum value extration."
+      ];
+
+    const tags = 
+      insights[0].aiInsights.hiddenCosts?.length > 0 ? insights[0].aiInsights.hiddenCosts 
+      : ["Efficiency", "Discovery", "Optimized"];
   return (
     <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -42,7 +57,7 @@ function AiInsightCard() {
         <div className='relative mb-12'>
             <div className='absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full' />
             <p className='text-2xl text-gray-800 italic font-medium leading-relaxed pl-10 py-2'>
-                Summary
+                {displaySummary}
             </p>
         </div>
 
@@ -53,19 +68,21 @@ function AiInsightCard() {
                         <Target size={18} className='text-blue-600' />
                     </div>
                     <h4 className='text-[11px] font-black bg-gray-400 uppercase tracking-[0.3em]'>
-                        Asset Optimization
+                        Money Saving Tips
                     </h4>
                 </div>
                 <ul className='space-y-5'>
-                    <motion.li whileHover={{ x: 5 }}
+                    {optimizationTips.map((tip, i) => (
+                        <motion.li whileHover={{ x: 5 }}
                      className='text-sm font-bold text-gray-600 flex gap-5 items-start group/item'
                     >
                         <span className='flex-shrink-0 w-7 h-7 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center text-[10px] font-black 
                         group-hover/item:bg-blue-600 group-hover/item:text-white group-hover/item:Shadow-lg transition-all'>
-                            0
+                            0 {i + 1}
                         </span>
-                        <span className='leading-sung pt-1'>Tip</span>
+                        <span className='leading-sung pt-1'>{tip}</span>
                     </motion.li>
+                    ))}
                 </ul>
             </div>
 
@@ -75,14 +92,16 @@ function AiInsightCard() {
                         <Zap size={18} className='text-indigo-600' />
                     </div>
                     <h4 className='text-[11px] font-black text-gray-400 uppercase tracking-[0.3em]'>
-                        Strategic Markers
+                        Hidden Budgets
                     </h4>
                 </div>
                 <div className='flex flex-wrap gap-3'>
-                    <span className='px-6 py-3.5 bg-gray-50 rounded-2xl text-[11px] font-black text-gray-700 border border-gray-100 
+                    {tags.map((tag, i) => (
+                        <span className='px-6 py-3.5 bg-gray-50 rounded-2xl text-[11px] font-black text-gray-700 border border-gray-100 
                     uppercase tracking-widest hover:border-blue-500/50 hover:bg-white hover:text-blue-600 hover:shadow-md transition-all cursor-default'>
-                        Tags
+                        {tag}
                     </span>
+                    ))}
                 </div>
 
                 <div className='mt-8 p-5 bg-amber-50/50 rounded-3xl border-amber-100/50 flex items-start gap-4'>

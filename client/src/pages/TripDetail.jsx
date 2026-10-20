@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import Navbar from "../components/Navbar.jsx"
 import TripImg from '../assets/trip.jpg'
 import { motion } from 'framer-motion'
@@ -8,8 +8,62 @@ import TimeLineCard from '../components/TimeLineCard.jsx'
 import AiInsightCard from '../components/AiInsightCard.jsx'
 import MapView from '../components/MapView.jsx'
 import LogisticRow from '../components/LogisticRow.jsx'
+import { useNavigate, useParams } from 'react-router'
+import toast from 'react-hot-toast'
+import { budgetApi, tripApi } from '../services/app.js'
+import LoadingScreen from '../components/LoadingScreen.jsx'
+import ExportPDF from '../components/ExportPDF.jsx'
 
 function TripDetail() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [trip, setTrip] = useState(null);
+    const [budget, setBudget] = useState(null);
+    const [loading, setloading] = useState(true);
+    const [activeDay, SetActiveDay] = useState(0);
+    const [mapFocus, setMapFocus] = useState(0);
+
+    useEffect(() => {
+        const fetchTrip = async () => {
+            try {
+                const res = await tripApi.getById(id);
+                const data = res.data?.trip || res.data || res;
+                const budgetres = await budgetApi.getHistory();
+                const budgetData = budgetres.budgetres?.budgets || budgetres.budgetres || budgetres;
+                setBudget(budgetData);
+
+                setTrip(data);
+            }
+            catch (error) {
+                toast.error("Trip data unavailable");
+                navigate('/trips');
+            } finally {
+                setloading(false);
+            }
+        };
+        fetchTrip();
+    }, [id, navigate]);
+
+    const totalCost = useMemo(() => {
+        if (!trip?.itinerary?.days) return 0;
+        return trip.itinerary.days.reduce((acc, day) => {
+            return (
+                acc +
+                (parseFloat(day.morning?.estimatedCost) || 0),
+                (parseFloat(day.afternoon?.estimatedCost) || 0),
+                (parseFloat(day.evening?.estimatedCost) || 0)
+            );
+        }, 0);
+    }, [trip]);
+
+    if (loading) return <LoadingScreen />;
+    if (!trip) return null;
+
+    const { destination, itinerary, input, logistics, insight } = trip;
+
+    const currentDay = itinerary?.days?.[activeDay];
+    const cityName = destination.split(", ")[0].trim();
+
     return (
         <div className='min-h-screen bg-[#050506] text-white font-sans selection:bg-blue-500/30'>
             <Navbar />
@@ -34,16 +88,16 @@ function TripDetail() {
                                 Confirmed Trip
                             </span>
                             <p className='text-gray-400 text-xs text-xs font-bold uppercase tracking-widest flex items-center gap-2'>
-                                <MapPin size={14} className='text-blue-500' /> Designation
+                                <MapPin size={14} className='text-blue-500' /> {destination}
                             </p>
                         </div>
 
                         <h1 className='text-7xl md:text-9xl lg:text-8xl font-black uppercase tracking-tighter italic leading-none mb-10'>
-                            City Name <span className='text-blue-600'>.</span>
+                           {cityName} <span className='text-blue-600'>.</span>
                         </h1>
                         <div className='flex flex-wrap items-center gap-6'>
-                            <HeaderBade icon={Calendar} label={"Duration"} value={"Days"} />
-                            <HeaderBade icon={Users} label={"Group"} value={"Number Travels"} />
+                            <HeaderBade icon={Calendar} label={"Duration"} value={`${itinerary?.days?.length} Days`} />
+                            <HeaderBade icon={Users} label={"Group"} value={input?.numTravelers} />
 
                             <div className='bg-blue-600/10 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl flex items-center gap-4 
                         group-hover:bg-blue-600/20 transition-all shadow-2xl'>
@@ -55,16 +109,23 @@ function TripDetail() {
                                         Total Investment
                                     </span>
                                     <span className='text-xl font-black text-white tracking-tighter'>
-                                        Total Cost
+                                        ${totalCost.toLocaleString()}
                                     </span>
                                     <span className='text-[10px] text-blue-400 ml-2 font-bold uppercase italic'>
-                                        Budget
+                                        {input?.budget}
                                     </span>
                                 </div>
                             </div>
 
                             <div className='ml-auto flex gap-3'>
-                                <button className='p-4 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl hover:bg-white/20 transition-all'>
+                                <ExportPDF tripData={trip} />
+                                <button 
+                                className='p-4 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl hover:bg-white/20 transition-all'
+                                onClick={() => {
+                                    navigator.clipboard.writeText(window.location.href);
+                                    toast.success("Link Shared");
+                                }}
+                                >
                                     <Share2 size={20} />
                                 </button>
                             </div>
@@ -76,23 +137,48 @@ function TripDetail() {
             <main className='container mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16'>
                 <div className='lg:col-span-8 space-y-12'>
                     <div className='flex items-center gap-2 overflow-auto pb-4 border-b border-white/5 scrollbar-hide'>
-                        <button className={`px-8 py-4 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap`}>
-                            Day 1
+                        {itinerary?.days.map((_, i) => (
+                            <button 
+                            className={`px-8 py-4 rounded-2xl text-xs font-black uppercase transition-all whitespace-nowrap
+                            ${activeDay === i ? "bg-blue-600 text-white shadow-xl shadow-blue-600/20" : "bg-white/5 text-gray-500 hover:text-white"}`
+                            }
+                            onClick={() => SetActiveDay(i)}
+                            >
+                            Day {i + 1}
                         </button>
+                        ))}
                     </div>
 
                     <div className='space-y-4'>
-                        <TimeLineCard time={"09:00 Am"} period={"Morning"} icon={Sun} data={""} />
-                        <TimeLineCard time={"01:00 Pm"} period={"Afternoon"} icon={Coffee} data={""} />
-                        <TimeLineCard time={"07:00 Pm"} period={"Evening"} icon={Moon} data={""} />
+                        <TimeLineCard 
+                            time={"09:00 Am"} 
+                            period={"Morning"} 
+                            icon={Sun} 
+                            data={currentDay?.morning} 
+                            onFocus={setMapFocus}
+                            />
+                        <TimeLineCard 
+                            time={"01:00 Pm"} 
+                            period={"Afternoon"} 
+                            icon={Coffee} 
+                            data={currentDay?.afternoon} 
+                            onFocus={setMapFocus}
+                            />
+                        <TimeLineCard 
+                            time={"07:00 Pm"} 
+                            period={"Evening"} 
+                            icon={Moon} 
+                            data={currentDay?.evening} 
+                            onFocus={setMapFocus}
+                            />
                     </div>
-                    <AiInsightCard />
+                    <AiInsightCard insights={budget}/>
                 </div>
 
                 <aside className='lg:col-span-4 space-y-8'>
                     <div className='sticky top-24 space-y-8'>
                         <div className='h-[400px] bg-black rounded-[2.5rem] overflow-hidden border border-white/10 relative shadow-2'>
-                            <MapView />
+                            <MapView destination={destination} itinerary={itinerary} activeDay={activeDay} focusLocation={mapFocus} />
                         </div>
 
                         <div className='bg-[#0a0a0b] border border-white/5 rounded-[2.5rem] p-8 space-y-8 shadow-2xl relative overflow-hidden'>
@@ -107,23 +193,23 @@ function TripDetail() {
                                     <LogisticRow
                                         icon={Building2}
                                         label="Primary Residence"
-                                        value="Dummy"
+                                        value={logistics?.hotel || `Boutique Stay in ${cityName}`}
                                     />
 
                                     <LogisticRow
                                         icon={TrainFront}
                                         label="Transit Network"
-                                        value="Dummy"
+                                        value={logistics?.transport || `local Integrated Transit`}
                                     />
                                 </div>
                             </div>
 
                             <div className='p-8 border-t border-white/5 space-y-6'>
-                            <h3 className='text-[10px] font-black text-gray-500 uppercase tracking-[0.4em]'>
-                                Essential Intel
-                            </h3>
-                            <LogisticRow icon={ShieldCheck} label={"Safety Protocol"} value={"Region Verified - Safe"} />
-                            <LogisticRow icon={ShieldCheck} label={"Safety Protocol"} value={"Region Verified - Safe"} />
+                                <h3 className='text-[10px] font-black text-gray-500 uppercase tracking-[0.4em]'>
+                                    Essential Intel
+                                </h3>
+                                <LogisticRow icon={ShieldCheck} label={"Safety Protocol"} value={"Region Verified - Safe"} />
+                                <LogisticRow icon={ShieldCheck} label={"Safety Protocol"} value={"Region Verified - Safe"} />
                             </div>
                         </div>
                     </div>

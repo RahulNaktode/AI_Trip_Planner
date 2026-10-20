@@ -33,7 +33,7 @@ function App() {
   const Privateroute = ({ children }) => {
     const { user, loading } = useAuth();
 
-    // if (loading) return <LoadingScreen />
+    if (loading) return <LoadingScreen />
 
     return user ? (
       <PageWrapper>{children}</PageWrapper>
@@ -45,7 +45,7 @@ function App() {
   const Publicroute = ({ children }) => {
     const { user, loading } = useAuth();
 
-    // if (loading) return <LoadingScreen />
+    if (loading) return <LoadingScreen />
 
     return user ? (
       <Navigate to={'/dashboard'} replace />
