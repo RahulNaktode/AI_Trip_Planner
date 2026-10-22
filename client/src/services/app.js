@@ -63,6 +63,8 @@ export const tripApi = {
     },
     getById: (id) => api.get(`/trip/${id}`),
     delete: (id) => api.delete(`/trip/${id}`),
+   
+    
 };
 
 export const budgetApi = {

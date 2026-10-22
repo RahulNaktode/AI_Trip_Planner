@@ -184,6 +184,7 @@ function Dashboard() {
                                             </h3>
 
                                             <span className='text-[9px] font-black text-gray-600 uppercase tracking-widest'>
+                                                {console.log(trip.input)}
                                                 {trip.input?.duration} Day Mission
                                             </span>
                                         </div>
