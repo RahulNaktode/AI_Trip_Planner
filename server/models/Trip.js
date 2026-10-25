@@ -20,7 +20,7 @@ const tripSchema = new Schema({
         duration: { type: Number, default: 3 },
         numTravelers: { type: Number, default: 1 },
         travelStyle: { type: String, default: "standard" },
-        interest: String,
+        interest: [String],
         budgetMin: Number,
         budgetMax: Number,
     },

@@ -94,17 +94,17 @@ function SavedTrips() {
                                     <div className='mt-auto grid grid-cols-3 gap-8 border-t border-white/10 pt-12 pb-8'>
                                         <Matrix
                                             label={"duration"}
-                                            value={`${selectedTrip?.input?.duration}`}
+                                            value={`${selectedTrip?.inputs?.duration} Days`}
                                             icon={Calendar}
                                         />
                                         <Matrix
                                             label={"Number of People"}
-                                            value={`${selectedTrip?.input?.numTravelers || ""}`}
+                                            value={`${selectedTrip?.inputs?.numTravelers || ""} Group`}
                                             icon={Zap}
                                         />
                                         <Matrix
                                             label={"Style"}
-                                            value={`${selectedTrip?.input?.travelStyle}` || "Nomad"}
+                                            value={`${selectedTrip?.inputs?.travelStyle}` || "Nomad"}
                                             icon={Layers}
                                         />
                                     </div>
@@ -177,7 +177,7 @@ function SavedTrips() {
                                             </h4>
                                             <p className='text-[10px] font-bold text-gray-600 uppercase tracking-widest'>
                                                 {console.log(trip.input)}
-                                                {trip?.input?.duration}D Trip
+                                                {trip?.inputs?.duration}D Trip
                                             </p>
                                         </div>
                                         <ArrowRight size={18} />

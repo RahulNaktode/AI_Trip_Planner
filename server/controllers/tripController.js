@@ -11,7 +11,6 @@ const generateTrip = async (req, res) => {
   try {
     const { destination, inputs = {} } = req.body;
 
-    // Validate destination
     if (!destination) {
       return res.status(400).json({
         success: false,
@@ -19,7 +18,6 @@ const generateTrip = async (req, res) => {
       });
     }
 
-    // Get logged-in user ID
     const userId = req.user?.userId || req.user?._id;
 
     if (!userId) {
@@ -30,7 +28,7 @@ const generateTrip = async (req, res) => {
     }
 
     const duration = parseInt(inputs.duration) || 3;
-    const travelers = parseInt(inputs.numTravelers) || 1;
+    const travelers = parseInt(inputs?.numTravelers);
 
     const prompt = `
 You are a travel expert.
@@ -91,10 +89,6 @@ Use exactly this structure:
 Generate exactly ${duration} days.
 `;
 
-    // ==========================================
-    // Gemini API with retry
-    // ==========================================
-
     const models = [
   "gemini-3.7-flash",
   "gemini-3.6-flash",
@@ -140,10 +134,6 @@ Generate exactly ${duration} days.
       }
     }
 
-    // ==========================================
-    // Check Gemini response
-    // ==========================================
-
     if (!interaction?.output_text) {
       throw new Error("Gemini returned an empty response");
     }
@@ -163,14 +153,10 @@ Generate exactly ${duration} days.
       });
     }
 
-    // ==========================================
-    // Save Trip in MongoDB
-    // ==========================================
-
     const newTrip = new Trip({
       userId,
       destination,
-      input: {
+      inputs: {
         ...inputs,
         duration,
         numTravelers: travelers,
@@ -196,7 +182,6 @@ Generate exactly ${duration} days.
 
     const status = error.status || error.statusCode;
 
-    // Gemini service temporarily unavailable
     if (status === 503) {
       return res.status(503).json({
         success: false,
@@ -205,7 +190,6 @@ Generate exactly ${duration} days.
       });
     }
 
-    // Other errors
     return res.status(500).json({
       success: false,
       message: "Failed to generate trip",

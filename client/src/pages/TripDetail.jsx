@@ -59,7 +59,7 @@ function TripDetail() {
     if (loading) return <LoadingScreen />;
     if (!trip) return null;
 
-    const { destination, itinerary, input, logistics, insight } = trip;
+    const { destination, itinerary, inputs, logistics, insight } = trip;
 
     const currentDay = itinerary?.days?.[activeDay];
     const cityName = destination.split(", ")[0].trim();
@@ -97,7 +97,7 @@ function TripDetail() {
                         </h1>
                         <div className='flex flex-wrap items-center gap-6'>
                             <HeaderBade icon={Calendar} label={"Duration"} value={`${itinerary?.days?.length} Days`} />
-                            <HeaderBade icon={Users} label={"Group"} value={input?.numTravelers} />
+                            <HeaderBade icon={Users} label={"Group"} value={inputs?.numTravelers} />
 
                             <div className='bg-blue-600/10 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl flex items-center gap-4 
                         group-hover:bg-blue-600/20 transition-all shadow-2xl'>
@@ -112,7 +112,7 @@ function TripDetail() {
                                         ${totalCost.toLocaleString()}
                                     </span>
                                     <span className='text-[10px] text-blue-400 ml-2 font-bold uppercase italic'>
-                                        {input?.budget}
+                                        {inputs?.budget}
                                     </span>
                                 </div>
                             </div>

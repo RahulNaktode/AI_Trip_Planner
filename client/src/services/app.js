@@ -6,7 +6,7 @@ const API_URL = "http://localhost:5080/api";
 const api = axios.create({
     baseURL: API_URL,
     headers: { "Content-Type" : "application/json" },
-    timeout: 9000,
+    timeout: 60000,
 });
 
 api.interceptors.request.use((config) => {
@@ -58,13 +58,13 @@ export const tripApi = {
         const res = await api.get("/trip/history");
         return res.data.trips || [];
     },
+    
     history: async function (){
         return this.getHistory;
     },
     getById: (id) => api.get(`/trip/${id}`),
     delete: (id) => api.delete(`/trip/${id}`),
    
-    
 };
 
 export const budgetApi = {
