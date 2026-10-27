@@ -69,7 +69,7 @@ export const tripApi = {
 
 export const budgetApi = {
     calculate: (data) => api.post("/budget/calculate", data),
-    getInsight:  (budgetId) => api.post("/budget/ai-insight", {budgetId}),
+    getInsight:  (budgetId) => api.post("/budget/ai-insights", {budgetId}),
     getHistory: async () => {
         const res = await api.get("/budget/history");
         return res.data.budgets || [];

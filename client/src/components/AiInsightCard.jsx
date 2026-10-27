@@ -4,11 +4,11 @@ import { AlertCircle, Infinity, ShieldCheck, Sparkles, Target, Zap } from 'lucid
 
 function AiInsightCard({ insights }) {
     const displaySummary = 
-      insights[0].aiInsights.verdict ||
+      insights.verdict ||
       "Optimization protocol complete. Neural engines have calibrated the most efficient route based on your unique travel style and budget constraints.";
     
     const optimizationTips = 
-      insights[0].aiInsights?.moneySavingTips.length > 0 ? insights[0].aiInsights?.moneySavingTips 
+      insights.moneySavingTips.length > 0 ? insights?.moneySavingTips 
       : [
         "Dynamic route clustering active to minimize transit time.",
         "Local peak-hour avoidance protocols enabled.",
@@ -16,7 +16,7 @@ function AiInsightCard({ insights }) {
       ];
 
     const tags = 
-      insights[0].aiInsights.hiddenCosts?.length > 0 ? insights[0].aiInsights.hiddenCosts 
+      insights.hiddenCosts?.length > 0 ? insights.hiddenCosts 
       : ["Efficiency", "Discovery", "Optimized"];
   return (
     <motion.div
@@ -77,7 +77,7 @@ function AiInsightCard({ insights }) {
                      className='text-sm font-bold text-gray-600 flex gap-5 items-start group/item'
                     >
                         <span className='flex-shrink-0 w-7 h-7 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center text-[10px] font-black 
-                        group-hover/item:bg-blue-600 group-hover/item:text-white group-hover/item:Shadow-lg transition-all'>
+                        group-hover/item:bg-blue-600 group-hover:/item:text-white group-hover/item:Shadow-lg transition-all'>
                             0 {i + 1}
                         </span>
                         <span className='leading-sung pt-1'>{tip}</span>
