@@ -13,6 +13,7 @@ import toast from 'react-hot-toast'
 import { budgetApi, tripApi } from '../services/app.js'
 import LoadingScreen from '../components/LoadingScreen.jsx'
 import ExportPDF from '../components/ExportPDF.jsx'
+import UserTripData from '../components/UserTripData.jsx'
 
 function TripDetail() {
     const { id } = useParams();
@@ -172,7 +173,7 @@ function TripDetail() {
                             onFocus={setMapFocus}
                             />
                     </div>
-                    <AiInsightCard insights={budget}/>
+                    <UserTripData  insights={trip?.insights || []} inputs={trip?.inputs || {}}/>
                 </div>
 
                 <aside className='lg:col-span-4 space-y-8'>
