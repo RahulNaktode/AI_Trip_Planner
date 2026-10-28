@@ -16,8 +16,6 @@ function Login() {
         e.preventDefault();
         setError("");
         setLoading(true);
-
-
         try {
             await login(form.email, form.password);
             navigate("/dashboard");
@@ -33,9 +31,9 @@ function Login() {
 
     return (
         <div className='min-h-screen bg-[#020203] flex font-sans selection:bg-blue-600 selection:text-white text-gray-400 overflow-hidden'>
-            <div className='hidden lg:flex lg-w-[-50px] bg-[#050507] relative flex-col justify-between p-16 overflow-hidden border-r border-white/5'>
+            <div className='hidden lg:flex lg:w-1/2 bg-[#050507] relative flex-col justify-between p-16 overflow-hidden border-r border-white/5'>
                 <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px.transparent_1px)]
-      bg-[size:40px_40px]'/>
+                  bg-[size:40px_40px]'/>
                 <div className='absolute top-[-20px] left-[-10px] w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full' />
                 <div className='absolute bottom-[0%] right-[-10%] w-[400px] h-[400px] bg-blue-900/10 blur-[120px] rounded-full' />
 
@@ -50,7 +48,7 @@ function Login() {
                     </span>
                 </Link>
 
-                <div className='relative z-10 max-w-lg'>
+                <div className='relative z-10 max-w-xl'>
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -65,7 +63,7 @@ function Login() {
                         </p>
 
                         <div className='grid grid-cols-2 gap-4'>
-                            <div className='p-6 bg-white/[0.03] backdrop-blur-md rounded-[32px] border border-white/5 group hover:border-blue=500/30 transition-all'>
+                            <div className='p-6 bg-white/[0.03] backdrop-blur-md rounded-[32px] border border-white/5 group hover:border-blue-500/30 transition-all'>
                                 <Radar className='text-blue-500 mb-4 animate-pulse' size={24} />
                                 <h4 className='font-black text-white uppercase italic text-xs tracking-widest mb-1'>
                                     Live Sync

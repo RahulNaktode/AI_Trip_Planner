@@ -16,7 +16,7 @@ const navLinks = [
 ]
 
 function Navbar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -88,8 +88,9 @@ function Navbar() {
                                 </div>
 
                                 <button className='w-10 h-10 rounded-xl bg-white/[0.02] text-gray-500 hover:text-rose-500 hover:bg-rose-500/10
-                    border border-white/5 hover:border-rose-500/20 transition-all flex items-center justify-center'
+                                **: border border-white/5 hover:border-rose-500/20 transition-all flex items-center justify-center'
                                     title='Ternimate Session'
+                                    onClick={() => logout()}
                                 >
                                     <LogOut size={16} />
                                 </button>
@@ -104,7 +105,7 @@ function Navbar() {
                             <Link
                                 to='/login'
                                 className='bg-blue-600 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest
-                    hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] flex items-center gap-2'>
+                                hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] flex items-center gap-2'>
                                 Login
                                 <Activity size={12} className="animate-pulse" />
                             </Link>
@@ -132,7 +133,10 @@ function Navbar() {
                             })}
                         </div>
                         <div className='h-px bg-white/5 my-2 mx-2'>
-                            <button className='flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all'>
+                            <button className='flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase 
+                            tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all'
+                            
+                            >
                                 <LogOut size={16} />Terminat Session
                             </button>
                         </div>

@@ -130,8 +130,7 @@ function Register() {
                     </div>
 
                     <div className='bg-[#08080a] rounded-[40px] border border-white/5 p-2 shadow-2xl relative overflow-hidden'>
-                        <div className='absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent' />
-
+                       <div className='absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30' />
                         {error && (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}

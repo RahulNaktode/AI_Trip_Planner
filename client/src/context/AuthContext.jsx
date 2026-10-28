@@ -7,71 +7,88 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-         let isMounted = true;
+    
+useEffect(() => {
+    let isMounted = true;
 
-        const initializeAuth = async () => {
-            try {
-                const token = localStorage.getItem("wander_token");
-                const storedUser = localStorage.getItem("wander_user");
+    const initializeAuth = async () => {
+        try {
+            const token = localStorage.getItem("wander_token");
+            const storedUser = localStorage.getItem("wander_user");
 
-                if (!token) {
-                    localStorage.removeItem("wander_user");
-                    return;
-                }
+            if (!token) {
+                setUser(null);
+                return;
+            }
 
-                // Parse stored user safely
-                if (storedUser && storedUser !== "undefined") {
-                    try {
-                        const parsedUser = JSON.parse(storedUser);
+            if (storedUser && storedUser !== "undefined") {
+                try {
+                    const parsedUser = JSON.parse(storedUser);
 
-                        if (isMounted) {
-                            setUser(parsedUser);
-                        }
-                    } catch {
-                        localStorage.removeItem("wander_user");
+                    if (isMounted) {
+                        setUser(parsedUser);
                     }
+                } catch {
+                    localStorage.removeItem("wander_user");
                 }
+            }
 
-                // Verify token with backend
-                const { data } = await authAPI.getMe();
+            const { data } = await authAPI.getMe();
+
+            if (isMounted) {
+                setUser(data.data);
+                localStorage.setItem(
+                    "wander_user",
+                    JSON.stringify(data.data)
+                );
+            }
+        } catch (error) {
+            console.error("Auth initialization error:", error);
+
+            if (error.response?.status === 401) {
+                localStorage.removeItem("wander_token");
+                localStorage.removeItem("wander_user");
 
                 if (isMounted) {
-                    setUser(data.user);
-                    localStorage.setItem(
-                        "wander_user",
-                        JSON.stringify(data.user)
-                    );
+                    setUser(null);
                 }
-            } catch (error) {
-                console.error("Session Integrity compromised", error);
             }
-            setLoading(false);
-        };
-
-        const syncAuth = (e) => {
-            if(e.key === "wander_token" && !e.newValue){
-                setUser(null);
-                window.location.href = '/login';
+        } finally {
+            if (isMounted) {
+                setLoading(false);
             }
-        };
+        }
+    };
 
-        window.addEventListener("storage", syncAuth);
-        initializeAuth();
+    const syncAuth = (e) => {
+        if (e.key === "wander_token" && !e.newValue) {
+            setUser(null);
+        }
+    };
 
-        return () => window.removeEventListener("storage", syncAuth);
-    }, [])
+    window.addEventListener("storage", syncAuth);
+    initializeAuth();
+
+    return () => {
+        isMounted = false;
+        window.removeEventListener("storage", syncAuth);
+    };
+}, []);
+
 
     const handleLogin = useCallback(async (email, password) => {
         const { data } = await authAPI.login({email, password});
         localStorage.setItem("wander_token", data.token);
         localStorage.setItem("wander_user", JSON.stringify(data.user));
-
-         console.log("Login response:", data);
-        console.log("Token received:", data.token);
         setUser(data.user);
         return data;
+    }, []);
 
+    const handleLogout = useCallback(() => {
+        localStorage.removeItem("wander_token");
+        localStorage.removeItem("wander_user");
+        setUser(null);
+        window.location.href = "/login";
     }, []);
 
     const handleeRegister = useCallback(async (formdata) => {
@@ -88,11 +105,12 @@ export function AuthProvider({ children }) {
             loading,
             register: handleeRegister,
             login: handleLogin,
+            logout: handleLogout,
             isAuthentication: !!user,
             isPro: user?.plan === "pro",
             currency: user?.currency || "USD",
         }),
-        [user, loading, handleeRegister],
+        [user, loading, handleeRegister, handleLogin, handleLogout],
     );
 
     return (
