@@ -7,10 +7,10 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import connectDB from "./db.js";
 import morgan from "morgan";
-import healthRouter from "./routes/health.js"
 import authRoutes from "./routes/auth.js";
 import tripRoute from "./routes/trip.js";
 import budgetRoute from "./routes/budget.js";
+import { getHealth, getHome } from "./controllers/healthController.js";
 
 dotenv.config();
 
@@ -38,7 +38,8 @@ const generateLimiter = rateLimit({
 
 const PORT = process.env.PORT || 5080;
 
-app.use("/api/get", healthRouter)
+app.use("/", getHome);
+app.use("/", getHealth);
 
 app.use("/api/auth", generateLimiter, authRoutes);
 app.use("/api/trip", generateLimiter, tripRoute);
