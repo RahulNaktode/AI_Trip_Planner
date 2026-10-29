@@ -22,7 +22,11 @@ function Login() {
 
         } catch (error) {
             setError(
-                error.response?.data?.error || "Authorization Failed please check your credentails"
+                error.response?.data?.message ||
+                error.response?.data?.error ||
+                error.response?.data?.errors?.[0]?.msg ||
+                error.message ||
+                "Login failed. Please try again."
             );
         } finally {
             setLoading(false);
@@ -37,9 +41,9 @@ function Login() {
                 <div className='absolute top-[-20px] left-[-10px] w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full' />
                 <div className='absolute bottom-[0%] right-[-10%] w-[400px] h-[400px] bg-blue-900/10 blur-[120px] rounded-full' />
 
-                <Link 
-                to={"/"}
-                className='relative z-10 flex items-center gap-3 group'>
+                <Link
+                    to={"/"}
+                    className='relative z-10 flex items-center gap-3 group'>
                     <div className='w-12 h-12 rounded-2xl bg-white/5 backdrop-blur-xl flex items-center justify-center border border-white/10 group-hover:border-blue-500 transition-all duration-500'>
                         <Globe className='text-blue-600' size={24} />
                     </div>
@@ -153,17 +157,17 @@ function Login() {
                                     type="password"
                                     placeholder="............"
                                     value={form.password}
-                                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                                    onChange={(e) => setForm({ ...form, password: e.target.value })}
                                 />
                             </div>
 
-                            <button 
-                            type='submit'
-                            disabled={loading}
-                            className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
+                            <button
+                                type='submit'
+                                disabled={loading}
+                                className='w-full group relative bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl
                                 font-black uppercase tracking-[0.3em] text-xs transition-all flex items-center justify-center gap-3 shadow-2xl shadow-blue-950/20 mt-8
                                 active:scale-95 disabled:opacity-50'>
-                                {loading ? <Loader2 size={20} className='animate-spin'/> : "Login" }
+                                {loading ? <Loader2 size={20} className='animate-spin' /> : "Login"}
                             </button>
                         </form>
                     </div>
