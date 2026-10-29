@@ -70,18 +70,18 @@ function Navbar() {
                     <div className='flex items-center gap-4'>
                         {user ? (
                             <>
-                                <div className='hidden lg:flex items-center gap-3 bg-white/[0.02] border border-white/5 py-1.5 pl-2 pr-4 
-                    rounded-xl hover:bg-white/[0.5] transition-all cursor-pointer group-user'>
+                                <div className='hidden lg:flex items-center gap-3 bg-white/[0.02] border border-white/5 py-1.5 pl-2 pr-8 
+                                   rounded-xl hover:bg-white/[0.5] transition-all cursor-pointer group-user'>
                                     <div className='w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border'>
                                         <User size={16} className='text-gray-400 group-hover:/user:text-blue-500' />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <p className='text-[13px] font-black text-white leading-none mb-1 uppercase tracking-tight'>Admin</p>
+                                        <p className='text-[13px] font-black text-white leading-none mb-1 uppercase tracking-tight'>{user.name}</p>
                                         <div className='flex items-center gap-1'>
                                             <div className='w-1 h-1 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_05px_#10b981]'>
-                                                <span className='text-[7px] font-black text-emerald-500/70 uppercase tracking-widest'>
+                                                <p className='text-[7px] font-black text-emerald-500/70 uppercase tracking-widest px-2'>
                                                     Online
-                                                </span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

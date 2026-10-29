@@ -10,6 +10,7 @@ import AiInsightCard from '../components/AiInsightCard.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import toast from 'react-hot-toast'
 import { budgetApi } from '../services/app.js'
+import LoadingScreen from '../components/LoadingScreen.jsx'
 
 function BudgetEstimator() {
     const { user } = useAuth();
@@ -141,7 +142,7 @@ function BudgetEstimator() {
                             {loading ? (
                                 <Loader2 size={18} className='animate-spin' />
                             ) : (
-                                <div>Execute Analysis <ArrowRight /></div>
+                                <div className='flex items-center justify-center gap-3'>Execute Analysis <ArrowRight /></div>
                             )}
                         </button>
                     </form>
@@ -234,9 +235,9 @@ function BudgetEstimator() {
                                         <button className='flex-1 bg-blue-600/5 border-blue-500/20 hover:bg-blue-600/10 
                                         rounded-[2.5rem] p-12 flex flex-col items-center justify-center text-center transition-all group'
                                         onClick={async () => {
-                                            setAiLoading(true);
                                             try{
                                                 const res = await budgetApi.getInsight(budget._id);
+                                                setAiLoading(true);
                                                 setAiInsights(res.data.aiInsights);
                                             }catch(error){
                                                 toast.error("Something Went Wrong");
@@ -260,7 +261,11 @@ function BudgetEstimator() {
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
                                         >
-                                            <AiInsightCard insights={aiInsights} />
+                                            {loading ? (
+                                                <LoadingScreen />
+                                            ) : (
+                                                <AiInsightCard insights={aiInsights} />
+                                            )}
                                         </motion.div>
                                     )}
                                 </div>
