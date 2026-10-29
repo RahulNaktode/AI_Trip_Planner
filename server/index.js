@@ -38,9 +38,6 @@ const generateLimiter = rateLimit({
 
 const PORT = process.env.PORT || 5080;
 
-app.use("/", getHome);
-app.use("/", getHealth);
-
 app.use("/api/auth", generateLimiter, authRoutes);
 app.use("/api/trip", generateLimiter, tripRoute);
 app.use("/api/budget", generateLimiter, budgetRoute);
