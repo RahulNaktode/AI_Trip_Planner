@@ -87,7 +87,7 @@ useEffect(() => {
     const handleLogout = useCallback(() => {
         localStorage.removeItem("wander_token");
         localStorage.removeItem("wander_user");
-        setUser(null);
+        
         window.location.href = "/login";
     }, []);
 
