@@ -10,6 +10,7 @@ import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
 import tripRoute from "./routes/trip.js";
 import budgetRoute from "./routes/budget.js";
+import { getHealth, getHome } from "./controllers/healthController.js";
 
 dotenv.config();
 
@@ -36,6 +37,9 @@ const generateLimiter = rateLimit({
 })
 
 const PORT = process.env.PORT || 5080;
+
+app.use("/", getHome);
+app.use("/health", getHealth);
 
 app.use("/auth", generateLimiter, authRoutes);
 app.use("/trip", generateLimiter, tripRoute);
