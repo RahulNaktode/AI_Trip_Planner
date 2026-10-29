@@ -1,15 +1,13 @@
-const getHome = (req, res) => {
-    res.json({
-        success: true,
-        message: "Welcome to the API"
-    })
+export const getHome = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to the API",
+  });
 };
 
-const getHealth = (req, res) => {
-    res.json({
-        success: true,
-        message: "Server is healthy"
-    })
+export const getHealth = (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy",
+  });
 };
-
-export { getHome, getHealth };

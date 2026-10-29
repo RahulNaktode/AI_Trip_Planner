@@ -34,8 +34,8 @@ const loginValidation = [
 
 const router = express.Router();
 
-router.post("/register", validate, registerValidation, register);
-router.post("/login", validate, loginValidation, login);
+router.post("/register", registerValidation, validate, register);
+router.post("/login", loginValidation, validate, login);
 router.get("/me", checkJWT, getMe);
 router.post("/logout", logout);
 
