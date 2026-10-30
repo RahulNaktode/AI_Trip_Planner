@@ -1,4 +1,4 @@
-import { Briefcase, Compass, Cpu, Globe, LayoutDashboard, LogOut, Menu, User, Wallet } from 'lucide-react'
+import { Briefcase, Compass, Cpu, Globe, LayoutDashboard, LogOut, Menu, User, Wallet, X } from 'lucide-react'
 import React, { Activity, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -96,7 +96,7 @@ function Navbar() {
                                 </button>
 
                                 <button className='md:hidden w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center'
-                                    onClick={() => setMenuOpen(menuOpen)}
+                                    onClick={() => setMenuOpen(!menuOpen)}
                                 >
                                     {menuOpen ? <X size={18} /> : <Menu size={18} />}
                                 </button>
@@ -115,31 +115,43 @@ function Navbar() {
             </div>
 
             <AnimatePresence>
-                {menuOpen && (
+                {menuOpen && user && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: -0 }}
+                        animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className='md:hidden absolute top-[85px] left-6 right-6 bg-black/90 blackdrop-blur-2xl rounded-2xl border border-white/10 p-4 shadow-2xl pointer-auto'
+                        className='md:hidden absolute top-[85px] left-6 right-6 bg-black/95 backdrop-blur-2xl rounded-2xl border border-white/10 p-4 shadow-2xl pointer-events-auto'
                     >
                         <div className='flex flex-col gap-1'>
-                            {navLinks.map(({ path, label, icon }) => {
-                                <a href="#"
-                                    className={`flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all`}
+                            {navLinks.map(({ path, label, icon }) => (
+                                <Link
+                                    key={path}
+                                    to={path}
+                                    onClick={() => setMenuOpen(false)}
+                                    className={`flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all
+                                           ${isActive(path)
+                                            ? "bg-blue-600 text-white"
+                                            : "text-gray-400 hover:bg-white/5 hover:text-white"
+                                        }`}
                                 >
                                     {icon}
                                     {label}
-                                </a>
-                            })}
+                                </Link>
+                            ))}
                         </div>
-                        <div className='h-px bg-white/5 my-2 mx-2'>
-                            <button className='flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase 
-                            tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all'
-                            
-                            >
-                                <LogOut size={16} />Terminat Session
-                            </button>
-                        </div>
+
+                        <div className='h-px bg-white/5 my-2 mx-2' />
+
+                        <button
+                            onClick={() => {
+                                logout();
+                                setMenuOpen(false);
+                            }}
+                            className='w-full flex items-center gap-4 p-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-rose-500 hover:bg-rose-500/10 transition-all'
+                        >
+                            <LogOut size={16} />
+                            Terminate Session
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>
