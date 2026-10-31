@@ -5,7 +5,7 @@ import { ArrowRight, Cpu, Fingerprint, Globe, Play, ShieldCheck, Zap, Lock, Acti
 import tripImage from './../assets/trip.jpg'
 import { Link } from 'react-router'
 import { useAuth } from '../context/AuthContext'
-import DEMO from "./../assets/ai_trip_demo.mp4"
+import DEMO from "../assets/ai_trip_vd.mp4"
 
 function Home() {
   const { user } = useAuth();
