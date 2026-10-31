@@ -93,9 +93,7 @@ useEffect(() => {
 
     const handleeRegister = useCallback(async (formdata) => {
         const { data } = await authAPI.register(formdata);
-        localStorage.setItem("wander_token", data.token);
-        localStorage.setItem("wander_user", JSON.stringify(data.user));
-        setUser(data.user);
+        
         return data;
     }, []);
 

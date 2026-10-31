@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import { motion } from 'framer-motion'
 import { ArrowRight, Cpu, Fingerprint, Globe, Play, ShieldCheck, Zap, Lock, ActivityIcon, Layers, Star, Activity, CloudSun, FileText } from 'lucide-react'
 import tripImage from './../assets/trip.jpg'
-
+import { Link } from 'react-router'
+import { useAuth } from '../context/AuthContext'
+import DEMO from "./../assets/ai_trip_demo.mp4"
 
 function Home() {
+  const { user } = useAuth();
+  const [showDemo, setShowDemo] = useState(false);
+
   const fadeInUp = {
     initial: {
       opacity: 0,
@@ -51,15 +56,43 @@ function Home() {
               </p>
 
               <div className="flex flex-wrap gap-3">
-                <a
-                  href="#"
+                <Link
+                  to={user ? "/dashboard" : "/login"}
                   className="px-12 py-6 bg-blue-600 text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-blue-500 transition-all flex items-center gap-3"
                 >
                   Initialize Mission
                   <ArrowRight size={18} />
-                </a>
+                </Link>
 
+                {showDemo && (
+                  <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur flex items-center justify-center p-6">
+
+                    <div className="w-full max-w-4xl bg-[#08080a] border border-white/10 rounded-3xl p-6 relative">
+
+                      <button
+                        onClick={() => setShowDemo(false)}
+                        className="absolute -top-4 -right-4 bg-red-600 text-white w-10 h-10 rounded-full"
+                      >
+                        ✕
+                      </button>
+
+                      <h2 className="text-white text-2xl font-black mb-6">
+                        WANDER AI SYSTEM DEMO
+                      </h2>
+
+                      <video
+                        controls
+                        autoPlay
+                        className="w-full rounded-xl"
+                      >
+                        <source src={DEMO} type="video/mp4" />
+                      </video>
+
+                    </div>
+                  </div>
+                )}
                 <button
+                  onClick={() => setShowDemo(true)}
                   className="px-12 py-6 border border-white/10 text-white rounded-xl font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-all flex items-center gap-3"
                 >
                   <Play size={16} fill="currentColor" />
@@ -87,10 +120,8 @@ function Home() {
                   Patagonia Ride Expedition
                 </p>
               </div>
-
             </div>
           </div>
-
         </div>
       </section>
 
@@ -307,7 +338,6 @@ function Home() {
         </motion.div>
       </section>
 
-      {/* GLOBAL DEPLOYMENTS */}
       <section className="py-32 px-6 bg-[#050507]">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-20">
@@ -419,12 +449,12 @@ function Home() {
             Plan Less <br />{" "}
             <span className='text-blue-600 not-italic'>Explore more</span>
           </h2>
-          <a href=""
-            className='px-20 py-10 bg-white text-black rounded-2xl text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
+          <Link to={user ? "/dashboard" : "/login"}
+            className='px-20 py-10 bg-white text-black rounded-2xl text-sm md:text-2xl font-black uppercase tracking-widest hover:blue-600 hover:bg-blue-600
           hover:text-white transition-all transform hover:-translate-y-4 shadow-[0_40px_80px_rdba(255,255,255,0.1)]'
           >
             Initialize Mission
-          </a>
+          </Link>
         </motion.div>
       </section>
 

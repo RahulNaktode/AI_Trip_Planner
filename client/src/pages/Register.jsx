@@ -42,7 +42,7 @@ function Register() {
         try {
             await register(form);
             toast.success(`Welcome aboard, ${form.name.split(" ")[0]}`)
-            navigate("/dashboard");
+            navigate("/login", { replace: true });
         } catch (err) {
             setError({ general: err.resonse?.data?.error || "Connect Failure....." })
         } finally {
